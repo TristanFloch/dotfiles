@@ -11,7 +11,7 @@ configuration {
 	font:							"Iosevka Nerd Font 10";
     show-icons:                     true;
 	icon-theme: 					"Papirus";
-    display-drun: 					"";
+    display-drun: 					"";
     drun-display-format:            "{name}";
     disable-history:                false;
     fullscreen:                     false;
@@ -27,7 +27,7 @@ window {
     text-color:                     @fg;
 	border:							0px;
 	border-color:					@ac;
-    border-radius:                  12px;
+    border-radius:                  0px;
 	width:							35%;
     location:                       center;
     x-offset:                       0;
@@ -110,6 +110,6 @@ element selected {
     background-color:               @se;
     text-color:                     @fg;
 	border:							0% 0% 0% 0%;
-    border-radius:                  12px;
+    border-radius:                  0px;
     border-color:                  	@bg;
 }
