@@ -1,0 +1,467 @@
+#+TITLE: My literate GNU Emacs config
+#+AUTHOR: Tristan Floch
+
+#+STARTUP: overview
+
+* Package management
+** Setup package.el to work with MELPA, ELPA and ORG
+#+begin_src emacs-lisp
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")
+			 ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-refresh-contents)
+(package-initialize)
+#+end_src
+
+** =use-package=
+#+begin_src emacs-lisp
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+#+end_src
+
+* Files
+** Modules
+#+begin_src emacs-lisp
+  (use-package recentf
+    :config
+    (recentf-mode))
+
+  (use-package sudo-edit)
+#+end_src
+
+* Appearance
+** Icons
+#+begin_src emacs-lisp
+(use-package all-the-icons)
+#+end_src
+
+** TODO Dashboard
+#+begin_src emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :init      ;; tweak dashboard config before loading it
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
+    (setq dashboard-banner-logo-title "Emacs > All")
+    (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+    ;;(setq dashboard-center-content nil) ;; set to 't' for centered content
+    (setq dashboard-items '((recents . 5)
+			    (agenda . 5 )
+			    (bookmarks . 3)
+			    (projects . 3)
+			    (registers . 3)))
+    :config
+    (dashboard-setup-startup-hook)
+    (dashboard-modify-heading-icons '((recents . "file-text")
+				      (bookmarks . "book"))))
+#+end_src
+
+This setting ensures that =emacsclient= always opens on dashboard rather than scratch.
+#+begin_src emacs-lisp
+;;  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+#+end_src
+
+** Theme
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :init (load-theme 'doom-palenight t)
+    )
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+#+end_src
+
+** Windows decorations off
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
+** Fonts
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil
+  :font "Source Code Pro"
+  :height 125
+  :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+  :font "DejaVu Sans"
+  :height 125
+  :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+  :font "Source Code Pro"
+  :height 125
+  :weight 'medium)
+
+;; Uncomment the following line if line spacing needs adjusting.
+;; (setq-default line-spacing 0.12)
+
+;; Needed if using emacsclient. Otherwise, your fonts will be smaller than expected.
+;; (add-to-list 'default-frame-alist '(font . "Source Code Pro-12"))
+;; changes certain keywords to symbols, such as lamda!
+(setq global-prettify-symbols-mode t)
+#+end_src
+
+*** Zooming in and out
+#+begin_src emacs-lisp
+;; zoom in/out like we do everywhere else.
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+#+end_src
+*** Emojis
+#+begin_src emacs-lisp
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
+#+end_src
+** Modeline
+#+begin_src emacs-lisp
+  (require 'all-the-icons)
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    )
+  #+end_src
+
+** Line and column numbers
+#+begin_src emacs-lisp
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+#+end_src
+
+Prevent the display of line numbers for some modes:
+#+begin_src emacs-lisp
+  (dolist (mode '(term-mode-hook
+		  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+end_src
+
+** TODO Cursor
+#+begin_src emacs-lisp
+(setq cursor-in-non-selected-windows nil)
+#+end_src
+
+* Which Key
+#+begin_src emacs-lisp
+(use-package which-key
+  :init
+  (setq which-key-sort-order #'which-key-key-order-alpha
+        which-key-sort-uppercase-first nil
+        which-key-add-column-padding 1
+        which-key-max-display-columns nil
+        which-key-min-display-lines 6
+        which-key-side-window-slot -10))
+(which-key-mode)
+#+end_src
+
+* Key bindings
+** Better escape
+Make ESC qui prompts.
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
+** Evil mode
+#+begin_src emacs-lisp
+  (use-package evil
+    :init      ;; tweak evil's configuration before loading it
+    (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+    (setq evil-want-keybinding nil)
+    (setq evil-vsplit-window-right t)
+    (setq evil-split-window-below t)
+    (setq evil-undo-system 'undo-redo)
+    :config
+    (evil-mode 1)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+    )
+
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (setq evil-collection-mode-list '(dashboard dired ibuffer))
+    (evil-collection-init))
+#+end_src
+** General
+#+begin_src emacs-lisp
+  (use-package general
+    :after evil
+    :config
+    (general-create-definer tf/leader-keys
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+    )
+#+end_src
+** Main leader menu
+#+begin_src emacs-lisp
+  (tf/leader-keys
+   "." '(counsel-find-file :which-key "Find file")
+   "`" '(evil-switch-to-windows-last-buffer :which-key "Switch to last buffer")
+   )
+#+end_src
+** Buffers
+#+begin_src emacs-lisp
+  (tf/leader-keys
+   "b" '(:ignore t :which-key "buffers")
+   "bk" '(kill-current-buffer :which-key "Kill buffer")
+  ; "bb" '(ivy-switch-buffer :which-key "Switch workspace buffer")
+   "bB" '(counsel-switch-buffer :which-key "Switch buffer")
+   "bs" '(basic-save-buffer :which-key "Save buffer")
+   )
+#+end_src
+** Search
+#+begin_src emacs-lisp
+  (tf/leader-keys
+    "s" '(:ignore t :which-key "search")
+    "ss" '(counsel-grep-or-swiper :which-key "Search buffer")
+    "sb" '(counsel-grep-or-swiper :which-key "Search buffer")
+    )
+#+end_src
+** Toggles
+#+begin_src emacs-lisp
+  (tf/leader-keys
+   "t" '(:ignore t :which-key "toggle")
+   "t w" '(toggle-truncate-lines :which-key "Lines wrapping")
+   )
+#+end_src
+** Windows
+Bind "SPC w" to "C-w".
+#+begin_src emacs-lisp
+  (tf/leader-keys
+    "w" '(evil-window-map :which-key "window")
+   )
+#+end_src
+** Help
+Bind "SPC h" to "C-h".
+#+begin_src emacs-lisp
+  (tf/leader-keys
+   "h" '(help-command :which-key "help")
+   "ht" '(load-theme :which-key "Load theme")
+  )
+
+  (general-define-key
+   :keymaps 'help-map
+   ;; allow keys before bound keys in match
+   ;; since binding in a prefix map
+   :wk-full-keys nil
+   ;; make a prefix-command and add description
+   "r" '(:prefix-command tf/reload-prefix-map :which-key "reload")
+   "rr" '((lambda () (interactive) (load-file "~/.emacs.d.gnu/init.el")) :which-key "Reload Emacs config")
+   )
+#+end_src
+** Files
+#+begin_src emacs-lisp
+  (tf/leader-keys
+    "f" '(:ignore t :which-key "file")
+    "f f" '(find-file :which-key "Find file")
+    "f r" '(counsel-recentf :which-key "Recent files")
+    "f C" '(copy-file :which-key "Copy this file")
+    "f s" '(save-buffer :which-key "Save file")
+    "f D" '(delete-file :which-key "Delete this file")
+    "f R" '(rename-file :which-key "Rename/move file")
+    "f u" '(sudo-edit-find-file :which-key "Sudo find file")
+    "f U" '(sudo-edit :which-key "Sudo this file")
+    ;; "f p" TODO
+    )
+#+end_src
+** Quit
+#+begin_src emacs-lisp
+  (tf/leader-keys
+    "q" '(:ignore t :which-key "quit")
+    "qq" '(save-buffers-kill-terminal :which-key "Save and quit Emacs")
+    "qr" '(:ignore t :which-key "reload")
+    "qrR" '((lambda () (interactive) (load-file "~/.emacs.d.gnu/init.el")) :which-key "Reload config only")
+    )
+#+end_src
+
+** Hydra
+#+begin_src emacs-lisp
+    (use-package hydra
+      :defer t)
+
+    (defhydra hydra-text-scale (:timeout 4)
+      "scale text"
+      ("j" text-scale-increase "in")
+      ("k" text-scale-decrease "out")
+      ("q" nil "quit" :exit t))
+
+      (tf/leader-keys
+	"ts" '(hydra-text-scale/body :which-key "Scale text"))
+#+end_src
+     
+* TODO Dired
+#+begin_src emacs-lisp
+(use-package all-the-icons-dired)
+#+end_src
+
+* Ivy and Counsel
+** Ivy
+#+begin_src emacs-lisp
+  (use-package ivy
+    :defer 0.1
+    :bind (:map ivy-minibuffer-map
+	   ("C-l" . ivy-alt-done)
+	   ("C-j" . ivy-next-line)
+	   ("C-k" . ivy-previous-line)
+	   :map ivy-switch-buffer-map
+	   ("C-k" . ivy-previous-line)
+	   ("C-l" . ivy-done)
+	   ("C-d" . ivy-switch-buffer-kill)
+	   :map ivy-reverse-i-search-map
+	   ("C-k" . ivy-previous-line)
+	   ("C-d" . ivy-reverse-i-search-kill))
+    :config (ivy-mode 1)
+    )
+#+end_src
+
+** Ivy Rich
+#+begin_src emacs-lisp
+  (use-package ivy-rich
+    :after ivy
+    :custom
+    (ivy-virtual-abbreviate 'full
+     ivy-rich-switch-buffer-align-virtual-buffer t
+     ivy-rich-path-style 'abbrev)
+    :config
+    (ivy-set-display-transformer 'ivy-switch-buffer
+				 'ivy-rich-switch-buffer-transformer)
+    (ivy-rich-mode 1)
+  ) ;; this gets us descriptions in M-x.
+#+end_src
+
+** Counsel
+#+begin_src emacs-lisp
+  (use-package counsel
+    :after ivy
+    :config (counsel-mode 1)
+    )
+#+end_src
+
+* M-x tweaks
+The following line removes the annoying ‘^’ in things like counsel-M-x and other ivy/counsel prompts.  The default ‘^’ string means that if you type something immediately after this string only completion candidates that begin with what you typed are shown.  Most of the time, I’m searching for a command without knowing what it begins with though.
+
+#+begin_src emacs-lisp
+(setq ivy-initial-inputs-alist nil)
+#+end_src
+
+Smex is a package the makes M-x remember our history.  Now M-x will show our last used commands first.
+#+begin_src emacs-lisp
+(use-package smex)
+(smex-initialize)
+#+end_src
+
+* Org mode config
+** General variables
+#+begin_src emacs-lisp
+  (setq
+   org-directory "~/Documents/orgfiles/"
+   org-ellipsis " ▼"
+   org-src-fontify-natively t
+   org-src-tab-acts-natively t
+   org-confirm-babel-evaluate nil
+   org-edit-src-code-indentation 0
+   org-blank-before-new-entry (quote ((heading . nil)
+				      (plain-list-item . nil)))
+   )
+#+end_src
+
+** Bullets
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode))
+#+end_src
+
+** Source block
+Org-tempo is a package that allows for =<s= followed by TAB to expand to a begin_src tag.  Other expansions available include:
+| Typing the below + TAB | Expands to             |
+|------------------------+------------------------|
+| <a                     | =#+BEGIN_EXPORT ascii= |
+| <c                     | =#+BEGIN_CENTER=       |
+| <C                     | =#+BEGIN_COMMENT=      |
+| <e                     | =#+BEGIN_EXAMPLE=      |
+| <E                     | =#+BEGIN_EXPORT=       |
+| <h                     | =#+BEGIN_EXPORT html=  |
+| <l                     | =#+BEGIN_EXPORT latex= |
+| <q                     | =#+BEGIN_QUOTE=        |
+| <s                     | =#+BEGIN_SRC=          |
+| <v                     | =#+BEGIN_VERSE=        |
+
+#+begin_src emacs-lisp
+(use-package org-tempo
+  :ensure nil) ;; tell use-package not to try to install org-tempo since it's already there.
+#+end_src
+
+** Table of contents
+#+begin_src emacs-lisp
+  (use-package toc-org
+    :commands toc-org-enable
+    :init (add-hook 'org-mode-hook 'toc-org-enable)
+    )
+#+end_src
+
+* Prog mode
+** Rainbow delimiters
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
+* Projectile
+#+begin_src emacs-lisp
+  (use-package projectile
+    :config (projectile-mode)
+    :custom ((projectile-completion-system 'ivy))
+    )
+
+  (use-package counsel-projectile
+    :after projectile
+    :config (counsel-projectile-mode)
+    )
+#+end_src
+
+#+begin_src emacs-lisp
+  (tf/leader-keys
+    "p" '(:ignore t :which-key "project")
+    "p p" '(projectile-switch-project :which-key "Switch project")
+    "p a" '(projectile-add-known-project :which-key "Add new project")
+    "p s" '(projectile-save-project-buffers :which-key "Save project files")
+    "p T" '(projectile-test-project :which-key "Test project")
+    "p d" '(projectile-remove-known-project :which-key "Remove known project")
+    "p k" '(projectile-kill-buffers :which-key "Kill project buffers")
+    "p c" '(projectile-compile-project :which-key "Compile project")
+    "p f" '(projectile-find-file :which-key "Find file in project")
+    )
+#+end_src
+
+* TODO Commenting
+The keybinding needs to be added.
+#+begin_src emacs-lisp
+  (use-package evil-nerd-commenter
+    )
+#+end_src
+
+* Helpful
+#+begin_src emacs-lisp
+(use-package helpful
+  :commands (helpful-callable helpful-variable helpful-command helpful-key)
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
+#+end_src
+
