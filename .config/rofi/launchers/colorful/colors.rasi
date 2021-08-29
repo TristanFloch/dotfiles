@@ -4,6 +4,6 @@
   al:  #00000000;
   bg:  #1e2029ff;
   se:  #f8f8f2ff;
-  fg:  #FFFFFFff;
-  ac:  #bd93f9;
+  fg:  #f8f8f2ff;
+  ac:  #282a36;
 }

@@ -63,10 +63,10 @@ bindsym XF86MonBrightnessUp exec "light -A 10"
 bindsym XF86MonBrightnessDown exec "light -U 10"
 
 # Start Applications
-bindsym $mod+F1 exec emacsclient -c
+bindsym $mod+F1 exec --no-startup-id emacsclient -c
 # bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
-bindsym $mod+F2 exec brave
-bindsym $mod+F3 exec thunar
+bindsym $mod+F2 exec --no-startup-id brave
+bindsym $mod+F3 exec --no-startup-id thunar
 # bindsym Print exec --no-startup-id i3-scrot
 # bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
 # bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
@@ -119,8 +119,8 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
-bindsym $mod+Shift+t floating toggle
+bindsym $mod+Shift+space floating toggle ; border pixel 1
+bindsym $mod+Shift+t floating toggle ; border pixel 1
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
@@ -233,8 +233,8 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 
-# ArcoLinux Logout
-bindsym $mod+Shift+e exec --no-startup-id arcolinux-logout
+# Logout menu
+bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/applets/menu/powermenu.sh
 # bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # Lock screen
@@ -292,13 +292,13 @@ exec_always --no-startup-id autotiling
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 
 # Updater
-exec --no-startup-id pamac-tray
+# exec --no-startup-id pamac-tray
 
 # network
 exec --no-startup-id nm-applet
 
 # bluetooth
-exec --no-startup-id blueberry-tray
+# exec --no-startup-id blueberry-tray
 
 # num lock activated
 exec_always --no-startup-id numlockx on
@@ -434,11 +434,11 @@ exec --no-startup-id feh --randomize --bg-fill $HOME/Pictures/wallpapers/my_pics
 # bindsym ctrl+$mod+l exec ~/.config/scripts/lock
 
 # Window compositor
-exec_always --no-startup-id picom --config ~/.config/picom/picom.conf
-bindsym control+mod1+o exec --no-startup-id ~/.config/i3/scripts/picom-toggle.sh
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf &
+bindsym control+mod1+o exec --no-startup-id ~/.config/i3/scripts/picom-toggle.sh &
 
 # Start Redshift
-exec --no-startup-id redshift
+exec --no-startup-id redshift &
 
 # Screen shot utility
 bindsym ctrl+Print exec --no-startup-id escrotum -Cs

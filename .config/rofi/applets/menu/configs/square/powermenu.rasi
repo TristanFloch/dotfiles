@@ -24,6 +24,7 @@ configuration {
 
 window {
     transparency:                   "real";
+    border:                         0px;
     border-radius:                  0px;
     location:                       center;
     width:                       	800px;
@@ -35,16 +36,16 @@ prompt {
     enabled: 						true;
     padding:                        10px;
 	background-color: 				@background-light;
-	text-color: 					@accent;
+	text-color: 					@pink;
     border:                  		2px 2px 2px 2px;
     border-radius:                  0px;
-    border-color:                  	@accent;
+    border-color:                  	@pink;
 }
 
 textbox-prompt-colon {
 	expand: 						false;
 	str: 							" System ";
-	background-color: 				@accent;
+	background-color: 				@pink;
 	text-color: 					@background;
     padding:                        12px 10px 0px 10px;
 }
@@ -57,7 +58,7 @@ inputbar {
     expand:                         false;
     border:                  		0px;
     border-radius:                  0px;
-    border-color:                  	@accent;
+    border-color:                  	@background;
     margin:                         0px 0px 0px 0px;
     padding:                        0px;
     position:                       center;

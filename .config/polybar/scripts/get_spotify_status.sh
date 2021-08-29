@@ -43,6 +43,7 @@ else
         playerctl --player=$PLAYER metadata --format "$FORMAT"
     elif [ "$STATUS" = "No player is running"  ]; then
         echo "$STATUS"
+        # echo ""
     else
         update_hooks "$PARENT_BAR_PID" 1
         playerctl --player=$PLAYER metadata --format "$FORMAT"
