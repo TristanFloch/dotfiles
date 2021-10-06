@@ -15,18 +15,21 @@ alias 42 "proj; cd 42sh/"
 alias spider "proj; cd spider/"
 alias chess "proj; cd chess/"
 alias frigo "proj; cd ping/"
-alias pol "$HOME/.config/polybar/launch.sh"
 alias config "git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias javel "cd $HOME/Documents/programmation/java_workshop/"
 
 # Arco aliases
 alias cd.. "cd .."
-alias pdw "pwd"
-alias update "sudo pacman -Syyu"
-alias udpate "sudo pacman -Syyu"
-alias upate "sudo pacman -Syyu"
-alias updte "sudo pacman -Syyu"
-alias updqte "sudo pacman -Syyu"
+
+# Abbreviations
+if status --is-interactive
+   abbr --add --global screen-off 'xrandr --output HDMI-1 --off'
+   abbr --add --global screen-on 'xrandr --output HDMI-1 --auto --right-of eDP-1 ; ~/.config/polybar/launch.sh'
+   abbr --add --global pol '~/.config/polybar/launch.sh'
+   abbr --add --global doom '~/.emacs.d.doom/bin/doom'
+   abbr --add --global 'glog' 'git log --oneline --graph --all'
+   abbr --add --global 'gstat' 'git status'
+end
 
 # Colorize grep output (good for log files)
 alias grep='grep --color=auto'
