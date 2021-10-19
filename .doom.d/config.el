@@ -147,6 +147,8 @@
 (after! lsp-mode
   (setq! lsp-headerline-breadcrumb-segments '(project file symbols))
   (setq! lsp-headerline-breadcrumb-enable t)
+  (setq! lsp-ui-doc-show-with-cursor nil)
+  (setq! lsp-ui-doc-show-with-mouse t)
   )
 
 ;; (map! :after neotree-mode
@@ -212,5 +214,8 @@
       (:prefix-map ("o" . "open")
        :desc "Gnus" "g" #'gnus))
 
-(setq js2-basic-offset 2)
-;; (map! )
+(setq auth-sources '("~/.authinfo.gpg"))
+
+(remove-hook 'doom-first-input-hook #'evil-snipe-mode)
+
+(remove-hook! 'text-mode-hook #'spell-fu-mode)
