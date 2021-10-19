@@ -54,12 +54,15 @@ alias grep='grep --color=auto'
 # confirm before overwriting something
 alias cp="cp -i"
 
+set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+
 # env variable for doom emacs
 set -x EMACSDIR ~/.emacs.d.doom
 # set PATH $PATH ~/.emacs.d/bin/
 
 set EDITOR vim
-set PATH $PATH /home/tristan/.local/bin
+
+fish_add_path "$HOME/.local/bin"
 
 set -x PGDATA "$HOME/Documents/postgres_data"
 set -x PGHOST "/tmp"
