@@ -27,8 +27,25 @@ if status --is-interactive
    abbr --add --global screen-on 'xrandr --output HDMI-1 --auto --right-of eDP-1 ; ~/.config/polybar/launch.sh'
    abbr --add --global pol '~/.config/polybar/launch.sh'
    abbr --add --global doom '~/.emacs.d.doom/bin/doom'
-   abbr --add --global 'glog' 'git log --oneline --graph --all'
-   abbr --add --global 'gstat' 'git status'
+   abbr --add --global g 'git'
+   abbr --add --global gl 'git log --oneline --graph --all'
+   abbr --add --global gg 'git status'
+   abbr --add --global gc 'git checkout'
+   abbr --add --global gr 'git rebase'
+   abbr --add --global gp 'git push'
+   abbr --add --global gp-f 'git push --force-with-lease'
+   abbr --add --global gF 'git pull'
+   abbr --add --global gb 'git branch'
+   abbr --add --global gbc 'git checkout -b'
+   abbr --add --global gbl 'git checkout'
+   abbr --add --global end2end 'rm ~/Documents/code/sdk-python/package ; poetry run python end2end.py --use-local-sources --profile linux-release-gcc11'
+   abbr --add --global compat-docker-pull "poetry run python run-ci.py generate-docker-compose --pull"
+   abbr --add --global compat-restart-services "poetry run python run-ci.py stop-services ; poetry run python run-ci.py start-services"
+   abbr --add --global compat-start-services "poetry run python run-ci.py start-services"
+   abbr --add --global compat-stop-services "poetry run python run-ci.py stop-services"
+   abbr --add --global compat-export-local-sdk "poetry run conan export ../sdk-native ; poetry run python run-ci.py native install local --profile=linux-release-gcc11"
+   abbr --add --global compat-before-tests "poetry run python run-ci.py native before --profile=linux-release-gcc11"
+   abbr --add --global compat-after-tests "poetry run python run-ci.py native after --profile=linux-release-gcc11"
 end
 
 # Colorize grep output (good for log files)
