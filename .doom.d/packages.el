@@ -53,5 +53,5 @@
 (package! clang-format)
 (package! org-gcal)
 (package! org-download)
-(package! ada-mode)
-(package! arduino-mode)
+(package! fish-mode)
+(package! vimrc-mode)

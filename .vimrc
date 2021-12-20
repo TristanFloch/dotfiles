@@ -112,20 +112,12 @@ nnoremap <SPACE> <Nop>
 let mapleader = " "
 
 map <leader><leader> <esc><esc>:GFiles<CR>
+nnoremap <leader>. :Files<CR>
+nnoremap <leader>bb :Buffers<CR>
 nnoremap <leader>bs :update<CR>
+nnoremap <leader>ss :BLines<CR>
+nnoremap <leader>sp :Rg<CR>
 nnoremap <leader>ps :wa<CR>
-nnoremap <leader>wh <C-w>h
-nnoremap <leader>wj <C-w>j
-nnoremap <leader>wk <C-w>k
-nnoremap <leader>wl <C-w>l
-nnoremap <leader>ww <C-w>w
-nnoremap <leader>wv <C-w>v
-nnoremap <leader>ws <C-w>s
-nnoremap <leader>wc <C-w>c
-nnoremap <leader>wr <C-w>r
-nnoremap <leader>wH <C-w>H
-nnoremap <leader>wJ <C-w>J
-nnoremap <leader>wK <C-w>K
-nnoremap <leader>wL <C-w>L
-nnoremap <leader>ss /
+nnoremap <leader>w <C-w>
 nnoremap <leader>bk :q<CR>
+nnoremap <leader>` <C-^>
