@@ -24,14 +24,14 @@ background = #1e2029
 foreground-alt = #728CA0
 foreground = #f8f8f2
 
-comment = #6272a4
-cyan = #8be9fd
-green = #50fa7b
-orange = #ffb86c
-pink = #ff79c6
-purple = #bd93f9
-red = #ff5555
-yellow = #f1fa8c
+color1 = #6272a4    ; comment (blue)
+color2 = #8be9fd    ; cyan
+color3 = #50fa7b    ; green
+color4 = #ffb86c    ; orange
+color5 = #ff79c6    ; ping
+color6 = #bd93f9    ; purple
+color7 = #ff5555    ; red
+color8 = #f1fa8c    ; yellow
 
 primary = #bd93f9
 secondary = #6272a4
@@ -100,7 +100,7 @@ cursor-scroll = ns-resize
 type = internal/xwindow
 label = %title:0:30:...%
 format = <label>
-format-foreground = ${colors.purple}
+format-foreground = ${colors.primary}
 
 [module/xkeyboard]
 type = internal/xkeyboard
@@ -181,6 +181,7 @@ ws-icon-4 = 5;5
 ws-icon-5 = 6;6
 ws-icon-6 = 7;
 ws-icon-7 = 8;
+ws-icon-8 = 9;9
 
 [module/xbacklight]
 type = internal/xbacklight
